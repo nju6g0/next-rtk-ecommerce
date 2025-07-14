@@ -12,9 +12,7 @@ import { store } from "@/store";
 // }) {
 //   const storeRef = useRef<AppStore | null>(null);
 //   if (!storeRef.current) {
-//     // storeRef.current = makeStore();
-//     storeRef.current = store;
-
+//     storeRef.current = makeStore();
 //   }
 
 //   return <Provider store={storeRef.current}>{children}</Provider>;
