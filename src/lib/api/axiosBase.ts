@@ -10,11 +10,48 @@ import axios from "axios";
 // export default axiosInstance;
 
 export function createAxiosInstance(baseURL: string) {
-  return axios.create({
+  // ✅ 建立一個 Axios 實例
+  const instance = axios.create({
     baseURL,
     timeout: 5000,
     headers: {
       "Content-Type": "application/json",
     },
   });
+
+  // ✅ Request Interceptor：加上 token 或攔截特定路徑
+  instance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("authToken");
+
+      // 只有 /todos 開頭的 API 需要驗證
+      if (config.url?.startsWith("/todos")) {
+        if (!token) {
+          return Promise.reject(new Error("未登入，禁止請求 /todos"));
+        }
+      }
+
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+
+  // ✅ Response Interceptor：統一錯誤處理、重新導向
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        console.warn("未授權，請重新登入");
+        // 可以選擇導向登入頁、清除 token 等
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
 }

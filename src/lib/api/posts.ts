@@ -1,4 +1,4 @@
-import axios from "./axiosInstance";
+import axios from "./axiosClient";
 import { PostTypes } from "@/types/post";
 
 export const getPosts = () => axios.get<PostTypes[]>("/posts");
