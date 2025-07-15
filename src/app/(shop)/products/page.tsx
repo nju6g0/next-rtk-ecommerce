@@ -1,12 +1,6 @@
 import { Metadata } from "next";
+import { postsAPI } from "@/lib/api";
 import ProductsClient from "./productsClient";
-
-const API_URL = process.env.API_URL;
-
-async function fetchProducts() {
-  const res = await fetch(`${API_URL}/posts`);
-  return res.json();
-}
 
 // export async function generateMetadata() {
 //   const data = await fetchProducts();
@@ -21,6 +15,6 @@ export const metadata: Metadata = {
   keywords: ["Next.js", "Metadata", "Static"],
 };
 export default async function ProductsPage() {
-  const data = await fetchProducts();
-  return <ProductsClient data={data} />;
+  const res = await postsAPI.getPosts();
+  return <ProductsClient data={res.data} />;
 }

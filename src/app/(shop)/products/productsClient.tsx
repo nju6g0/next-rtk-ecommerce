@@ -1,4 +1,6 @@
-export default function ProductsClient(data: any) {
+import { PostTypes } from "@/types/post";
+
+export default function ProductsClient({ data }: { data: PostTypes[] }) {
   console.log("ProductsClient data:", data);
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
