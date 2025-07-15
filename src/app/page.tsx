@@ -1,4 +1,4 @@
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <main className="">I&#39;am home page.</main>
