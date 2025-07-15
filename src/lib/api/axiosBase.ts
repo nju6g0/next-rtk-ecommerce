@@ -9,7 +9,14 @@ import axios from "axios";
 
 // export default axiosInstance;
 
-export function createAxiosInstance(baseURL: string) {
+interface CreateAxiosInstanceOptions {
+  baseURL: string;
+  getToken?: () => string | undefined;
+}
+export function createAxiosInstance({
+  baseURL,
+  getToken,
+}: CreateAxiosInstanceOptions) {
   // ✅ 建立一個 Axios 實例
   const instance = axios.create({
     baseURL,
@@ -22,19 +29,15 @@ export function createAxiosInstance(baseURL: string) {
   // ✅ Request Interceptor：加上 token 或攔截特定路徑
   instance.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem("authToken");
-
-      // 只有 /todos 開頭的 API 需要驗證
+      const token = getToken?.();
       if (config.url?.startsWith("/todos")) {
         if (!token) {
           return Promise.reject(new Error("未登入，禁止請求 /todos"));
         }
       }
-
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }
-
       return config;
     },
     (error) => Promise.reject(error)
